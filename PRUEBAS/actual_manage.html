@@ -1,0 +1,46 @@
+{{extend 'layout.html'}}
+
+<h2>Graficos de variacion</h2>
+<p>Variacion de temperatura ultimas 24hs</p>
+<div class="ct-chart ct-perfect-fourth"></div>
+<p>Variacion de humedad ultimas 24hs</p>
+<div class="ct-chart2 ct-perfect-fourth"></div>
+
+<script src="{{=URL('static','js/chartist.min.js')}}"></script>
+<script>
+const intervalo_muestreo=1500;
+
+
+
+var data = {
+  // A labels array that can contain any sort of values
+  labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+  // Our series array that contains series objects or in this case series data arrays
+  series: [
+    [5, 2, 8, 2, 0],
+	[8, 2, 4, 2, 0]
+  ]
+};
+
+// Create a new line chart object where as first parameter we pass in a selector
+// that is resolving to our chart container  element. The Second parameter
+// is the actual data object.
+var grafico = new Chartist.Line('.ct-chart', data);
+var grafico2 = new Chartist.Line('.ct-chart2', data);
+
+setInterval(actualizoGrafico, intervalo_muestreo);
+
+var j = 0;
+function actualizoGrafico()
+{
+	j++;
+	for(let i = 0; i < 5;i++)
+		data.series[0][i] = Math.sin(j*i*3.14/3);
+	grafico.update(data);
+
+}
+
+
+</script>
+
+
