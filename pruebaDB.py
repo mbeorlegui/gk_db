@@ -8,8 +8,9 @@ rnd1 = random.randint(0, 5)
 rnd2 = random.randint(0, 10)
 rnd3 = random.randint(0, 10)
 rnd4 = random.randint(0, 10)
-des = 1     #PRESERVAR
+des = 1     # PRESERVAR
 posicionStr = None
+
 
 def sacar_pos():
     if separado[2] == 0:
@@ -24,6 +25,7 @@ def sacar_pos():
         posicionStr = "pivot"
     if separado[2] == 5:
         posicionStr = "extremo izquierdo"
+
 
 def create_table():
     c.execute("CREATE TABLE IF NOT EXISTS tablaJugadores\
@@ -52,23 +54,9 @@ def add_player(apell, nomb, pos):
 def read_from_db(apell, nomb):
     c.execute("SELECT * FROM tablaJugadores WHERE apellido = ? AND nombre = ?",
               (apell, nomb))
-    unido = str(c.fetchall())
-    if unido != "[]":
-        separado = unido.split(", ")
-        # print(separado)
-        # print(separado[0].strip("[('")) #Nombre
-        # print(separado[1].strip("'"))   #APELLIDO
-        # print(separado[2])              #posicion
-        # print(separado[3])              #lanz_tot
-        # print(separado[4])              #lanz_conv
-        # print(separado[5].strip(")]"))  #lanz_esrr
-        #sacar_pos()
-        print ("Seleccionó al jugador " + separado[0].strip("[('") + ", " +
-               separado[1].strip("'") + ". \nRealizó " + separado[3] +
-               " lanzamientos de los cuales " + separado[4] + " fueron "
-               "goles y " + separado[5].strip(")]") + " no lo fueron.")
-        #print("Este jugador juega de " + posicionStr)
-    else:
+    lista = c.fetchone()
+    if not lista:
+        print("Lista vacia")
         while True:
             print("No se encontró al jugador " + apell + ", " + nomb)
             print("¿Desea agregar un jugador con ese nombre?")
@@ -86,6 +74,12 @@ def read_from_db(apell, nomb):
                 break
             else:
                 print("Incorrecto. Reingresar")
+    else:
+        print("Lista NO vacia")
+        print("Seleccionó al jugador " + str(lista[0]) + ", " +
+              str(lista[1]) + ". \nRealizó " + str(lista[3]) + 
+              " lanzamientos de los cuales " + str(lista[4]) +
+              " fueron goles y " + str(lista[5]) + " no lo fueron.")
 
 
 def del_and_update():
